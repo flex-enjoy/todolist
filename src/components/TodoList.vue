@@ -4,6 +4,8 @@ import TodoGroup from "./TodoGroup.vue";
 
 <template>
     <div>
+        <TodoGroup :status="TodoStatus.Pending" />
+        <TodoGroup />
         <TodoGroup />
     </div>
 </template>
