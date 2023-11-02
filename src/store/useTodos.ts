@@ -28,9 +28,19 @@ export default () => {
   };
 
   const addNewTodo = (todo: Todo) => {
+    console.log(todoStore, todo);
     todoStore[todo.status].push(todo);
   };
 
-  return { getTodosByStatus, addNewTodo };
+  const updateTodo = (todo: Todo, newStatus: TodoStatus) => {
+    todo.status = newStatus;
+  };
+  const deleteTodo = (todoToDelete: Todo) => {
+    todoStore[todoToDelete.status] = todoStore[todoToDelete.status].filter(
+      (todo) => todo.id != todoToDelete.id,
+    );
+  };
+
+  return { getTodosByStatus, addNewTodo, deleteTodo, updateTodo };
 };
 

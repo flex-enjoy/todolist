@@ -10,7 +10,7 @@
 
   const props = defineProps<Props>();
 
-  const { getTodosByStatus } = useTodos();
+  const { getTodosByStatus, deleteTodo, updateTodo } = useTodos();
   const todoList = getTodosByStatus(props.status);
 
   const groupLabel = {
@@ -18,16 +18,31 @@
     [TodoStatus.InProgress]: 'In Progress',
     [TodoStatus.Completed]: 'Completed',
   };
+
+  const onDraggableChange = (payload: any) => {
+    console.log('payload', payload);
+    if (payload?.added?.element) {
+      updateTodo(payload?.added?.element, props.status);
+    }
+  };
 </script>
 
 <template>
   <div class="group-wrapper">
     <h3>{{ groupLabel[props.status] }}</h3>
 
-    <Draggable class="draggable" :list="todoList" group="todos" itemKey="id">
+    <Draggable
+      class="draggable"
+      :list="todoList"
+      group="todos"
+      itemKey="id"
+      @change="onDraggableChange"
+    >
       <template #item="{ element: todo }">
         <li>
           {{ todo.title }}
+          {{ todo.status }}
+          <span class="delete-icon" @click="deleteTodo(todo)">x</span>
           <div>
             <span class="todo-description">{{ todo.description }}</span>
           </div>
@@ -35,7 +50,7 @@
       </template>
     </Draggable>
 
-    <CreateTodo />
+    <CreateTodo :status="props.status" />
   </div>
 </template>
 
@@ -61,6 +76,10 @@
   }
   .todo-description {
     font-size: 12px;
+  }
+  .delete-icon {
+    float: right;
+    cursor: pointer;
   }
 </style>
 
